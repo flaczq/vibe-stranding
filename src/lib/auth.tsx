@@ -33,6 +33,7 @@ interface AuthContextType {
   signup: (username: string, email: string, password: string, avatar: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
   updateUser: (updates: Partial<User>) => void;
+  updateAvatar: (avatar: string) => Promise<{ success: boolean; error?: string }>;
   addXP: (amount: number) => void;
   unlockAchievement: (achievementId: string) => void;
   completeChallenge: (challengeId: string, xpEarned: number) => void;
@@ -108,14 +109,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } as User;
   }, [session]);
 
-  const login = async (email: string, password: string) => {
-    const result = await signIn("credentials", {
-      email,
-      password,
-      callbackUrl: "/dashboard",
-    });
+  const login = async (identifier: string, password: string) => {
+    try {
+      const result = await signIn("credentials", {
+        identifier,
+        password,
+        redirect: false,
+      });
 
-    return { success: true };
+      if (result?.error) {
+        let errorMsg = language === 'pl' ? 'Nieprawidłowe dane logowania' : 'Invalid email or password';
+        if (result.error === 'CredentialsSignin') {
+          errorMsg = language === 'pl' ? 'Nieprawidłowy e-mail lub hasło' : 'Invalid email or password';
+        }
+        return { success: false, error: errorMsg };
+      }
+
+      // Force a hard reload to the dashboard on success
+      if (typeof window !== 'undefined') {
+        window.location.href = "/dashboard";
+      }
+      return { success: true };
+    } catch (error: any) {
+      console.error("Login exception:", error);
+      return { success: false, error: error.message || (language === 'pl' ? 'Wystąpił nieoczekiwany błąd' : 'An unexpected error occurred') };
+    }
   };
 
   const signup = async (username: string, email: string, password: string, avatar: string) => {
@@ -150,6 +168,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await update(); // Trigger session refresh
   };
 
+  const updateAvatar = async (avatar: string) => {
+    if (!user) return { success: false, error: 'Not authenticated' };
+
+    const { updateUserAvatar } = await import('./actions');
+    const result = await updateUserAvatar(user.id, avatar);
+
+    if (result.success) {
+      await update({ image: avatar });
+      return { success: true };
+    }
+    return { success: false, error: result.error };
+  };
+
   const unlockAchievement = async (achievementId: string) => {
     // TODO: Implement server action
   };
@@ -176,6 +207,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         signup,
         logout,
         updateUser,
+        updateAvatar,
         addXP,
         unlockAchievement,
         completeChallenge,

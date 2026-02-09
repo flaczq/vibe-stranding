@@ -6,12 +6,17 @@ import { motion } from 'framer-motion';
 import { Home, BookOpen, Swords, Trophy, User, LogOut, Menu, X, Sun, Moon, Globe, Skull } from 'lucide-react';
 import { useAuth } from '@/lib/auth';
 import { MiniXPBar } from '@/components/game/XPBar';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export function Navbar() {
     const { user, logout, theme, setTheme, language, setLanguage, t } = useAuth();
     const pathname = usePathname();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     const navItems = [
         { href: '/dashboard', icon: Home, label: t.nav.dashboard },
@@ -77,7 +82,7 @@ export function Navbar() {
                                 }}
                                 className="p-1.5 rounded-full hover:bg-surface transition-colors"
                             >
-                                {theme === 'stranding' ? <Skull size={16} className="text-primary" /> : theme === 'dark' ? <Moon size={16} className="text-xp" /> : <Sun size={16} className="text-primary" />}
+                                {!mounted ? <Sun size={16} /> : (theme === 'stranding' ? <Skull size={16} className="text-primary" /> : theme === 'dark' ? <Moon size={16} className="text-xp" /> : <Sun size={16} className="text-primary" />)}
                             </button>
                         </div>
 

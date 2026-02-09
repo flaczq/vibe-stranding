@@ -27,12 +27,13 @@ export default function LoginPage() {
         setError('');
         setIsLoading(true);
 
-        try {
-            await login(identifier, password);
-        } catch (err: any) {
-            setError(err.message || 'Login failed. Please check your credentials.');
+        const result = await login(identifier, password);
+
+        if (result && !result.success) {
+            setError(result.error || 'Login failed. Please check your credentials.');
             setIsLoading(false);
         }
+        // Success is handled by redirect in useAuth.login
     };
 
     return (

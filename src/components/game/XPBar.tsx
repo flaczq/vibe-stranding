@@ -43,7 +43,6 @@ export function XPBar() {
                     animate={{ width: isMaxLevel ? '100%' : `${progress.percentage}%` }}
                     transition={{ duration: 1, ease: 'easeOut' }}
                 />
-                <div className="progress-shine absolute top-0 left-0 w-full h-full" />
             </div>
 
             {isMaxLevel && (

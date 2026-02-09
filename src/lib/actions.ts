@@ -5,6 +5,10 @@ import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcryptjs";
+import { Resend } from 'resend';
+import WelcomeEmail from "@/emails/WelcomeEmail";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function authenticate(
     prevState: string | undefined,
@@ -63,6 +67,23 @@ export async function registerUser(formData: FormData) {
                 role: "USER"
             }
         });
+
+
+
+        // Send Real Welcome Email via Resend
+        if (process.env.RESEND_API_KEY) {
+            try {
+                await resend.emails.send({
+                    from: process.env.RESEND_FROM || 'Vibe Stranding <onboarding@resend.dev>',
+                    to: email,
+                    subject: `Welcome to the Network, ${username}! 🦀`,
+                    react: WelcomeEmail({ username }),
+                });
+            } catch (emailError) {
+                console.error('Failed to send welcome email:', emailError);
+                // We don't fail the whole registration if email fails
+            }
+        }
 
         return { success: true };
     } catch (error) {
@@ -213,5 +234,25 @@ export async function deleteUser(userId: string) {
     } catch (error) {
         console.error('Delete user error:', error);
         return { error: 'Failed to delete user' };
+    }
+}
+
+export async function updateUserAvatar(userId: string, avatar: string) {
+    try {
+        if (!prisma) return { error: 'DB not available' };
+
+        await prisma.user.update({
+            where: { id: userId },
+            data: { image: avatar }
+        });
+
+        revalidatePath('/profile');
+        revalidatePath('/dashboard');
+        revalidatePath('/leaderboard');
+
+        return { success: true };
+    } catch (error) {
+        console.error('Update avatar error:', error);
+        return { error: 'Failed to update avatar' };
     }
 }

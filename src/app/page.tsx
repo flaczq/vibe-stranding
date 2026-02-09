@@ -8,12 +8,12 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function HomePage() {
-  const { user, isLoading, t, theme, language } = useAuth();
+  const { user, isLoading, t, theme, setTheme, language, setLanguage } = useAuth();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
 
-  const strandingEmojis = ['🕸️', '💀', '🧛', '👹', '👺', '🛸', '🌪️', '🌑', '🕳️', '🕯️', '🦇', '👻'];
-  const defaultEmojis = ['💻', '🚀', '✨', '🎮', '⚡', '🔮', '🎯', '💡', '🏆', '🔥', '🌟', '🤖'];
+  const strandingEmojis = ['🕸️', '💀', '🧛', '👹', '👺', '🛸', '🌪️', '🌑', '🕳️', '🕯️', '🦇', '👻', '🎭', '📿', '🗝️', '🗡️'];
+  const defaultEmojis = ['💻', '🚀', '✨', '🎮', '⚡', '🔮', '🎯', '💡', '🏆', '🔥', '🌟', '🤖', '🧩', '🎬', '🎹', '🎨'];
   const activeEmojis = theme === 'stranding' ? strandingEmojis : defaultEmojis;
 
   useEffect(() => {
@@ -26,36 +26,36 @@ export default function HomePage() {
   const features = [
     {
       icon: BookOpen,
-      title: 'Learn by Doing',
-      description: 'Interactive challenges that teach you AI-assisted coding from basics to mastery',
+      title: t.home.features.learn.title,
+      description: t.home.features.learn.desc,
       color: '#8b5cf6',
     },
     {
       icon: Trophy,
-      title: 'Earn & Compete',
-      description: 'Gain XP, unlock achievements, and climb the leaderboards',
+      title: t.home.features.compete.title,
+      description: t.home.features.compete.desc,
       color: '#f59e0b',
     },
     {
       icon: Zap,
-      title: 'Speed Challenges',
-      description: 'Race against the clock in timed coding competitions',
+      title: t.home.features.speed.title,
+      description: t.home.features.speed.desc,
       color: '#06b6d4',
     },
     {
       icon: Users,
-      title: 'Community',
-      description: 'Learn alongside thousands of developers mastering vibe coding',
+      title: t.home.features.community.title,
+      description: t.home.features.community.desc,
       color: '#22c55e',
     },
   ];
 
   const levels = [
-    { icon: '🌱', name: 'Sprout', desc: 'Learn the basics of AI prompting' },
-    { icon: '🌿', name: 'Apprentice', desc: 'Master intermediate techniques' },
-    { icon: '🌳', name: 'Developer', desc: 'Build real features with AI' },
-    { icon: '⚡', name: 'Expert', desc: 'Handle complex challenges' },
-    { icon: '🔮', name: 'Master', desc: 'Full project creation' },
+    { icon: '🌱', name: t.home.levels.sprout.name, desc: t.home.levels.sprout.desc },
+    { icon: '🌿', name: t.home.levels.apprentice.name, desc: t.home.levels.apprentice.desc },
+    { icon: '🌳', name: t.home.levels.developer.name, desc: t.home.levels.developer.desc },
+    { icon: '⚡', name: t.home.levels.expert.name, desc: t.home.levels.expert.desc },
+    { icon: '🔮', name: t.home.levels.master.name, desc: t.home.levels.master.desc },
   ];
 
   return (
@@ -63,26 +63,27 @@ export default function HomePage() {
       {/* Floating elements */}
       {mounted && (
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {[...Array(12)].map((_, i) => (
+          {[...Array(24)].map((_, i) => (
             <motion.div
               key={i}
               className="absolute text-4xl opacity-10"
               style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
+                left: `${(i * 17) % 100}%`,
+                top: `${(i * 13) % 100}%`,
               }}
               animate={{
-                y: [0, -50, 0],
-                x: [0, Math.random() * 30 - 15, 0],
+                y: [0, -100, 0],
+                x: [0, (i % 2 === 0 ? 30 : -30), 0],
                 rotate: [0, 360],
+                scale: [1, 1.2, 1],
               }}
               transition={{
-                duration: 10 + Math.random() * 10,
+                duration: 15 + (i % 10),
                 repeat: Infinity,
-                delay: Math.random() * 5,
+                delay: i * 0.5,
               }}
             >
-              {activeEmojis[i]}
+              {activeEmojis[i % activeEmojis.length]}
             </motion.div>
           ))}
         </div>
@@ -96,10 +97,32 @@ export default function HomePage() {
             {t.appName}
           </span>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-6">
+          <div className="flex items-center bg-surface-light rounded-full p-1 shadow-lg border border-surface-light">
+            <button
+              onClick={() => setLanguage(language === 'en' ? 'pl' : 'en')}
+              className="px-3 py-1.5 rounded-full text-xs font-bold transition-all hover:bg-surface flex items-center gap-1.5"
+            >
+              <span className="text-primary">🌐</span>
+              {language.toUpperCase()}
+            </button>
+            <div className="w-[1px] h-4 bg-surface mx-1" />
+            <button
+              onClick={() => {
+                const themes: ('stranding' | 'dark' | 'light')[] = ['stranding', 'dark', 'light'];
+                const currentIndex = themes.indexOf(theme);
+                const nextIndex = (currentIndex + 1) % themes.length;
+                setTheme(themes[nextIndex]);
+              }}
+              className="p-1.5 rounded-full hover:bg-surface transition-colors"
+            >
+              {theme === 'stranding' ? '💀' : theme === 'dark' ? '🌙' : '☀️'}
+            </button>
+          </div>
+
           <Link
             href="/login"
-            className="px-5 py-2 text-foreground-muted hover:text-foreground transition-colors"
+            className="px-5 py-2 text-foreground-muted hover:text-foreground transition-colors font-medium"
           >
             {t.hero.login}
           </Link>

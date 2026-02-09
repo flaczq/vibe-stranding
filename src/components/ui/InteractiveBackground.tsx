@@ -6,6 +6,7 @@ import { useAuth } from '@/lib/auth';
 
 export function InteractiveBackground() {
     const { theme } = useAuth();
+    const [mounted, setMounted] = React.useState(false);
     const mouseX = useMotionValue(0.5);
     const mouseY = useMotionValue(0.5);
 
@@ -25,6 +26,7 @@ export function InteractiveBackground() {
     const orb2Y = useTransform(smoothedY, [0, 1], [200, -200]);
 
     useEffect(() => {
+        setMounted(true);
         let frameId: number;
         let time = 0;
 
@@ -56,21 +58,23 @@ export function InteractiveBackground() {
     }, [mouseX, mouseY]);
 
     // Floating elements transforms (more parallax)
-    const strandingChars = ['🕸️', '💀', '🧛', '👹', '🕯️', '🦇'];
-    const defaultChars = ['💻', '🚀', '✨', '🎮', '⚡', '🔮'];
+    const strandingChars = ['🕸️', '💀', '🧛', '👹', '🕯️', '🦇', '🧛‍♀️', '🧟', '🌑', '🕳️', '🍂', '🕯️'];
+    const defaultChars = ['💻', '🚀', '✨', '🎮', '⚡', '🔮', '🤖', '👾', '🎯', '🔥', '🌟', '💎'];
     const activeChars = theme === 'stranding' ? strandingChars : defaultChars;
 
     const floaters = activeChars.map((char, i) => {
-        const tops = ['15%', '25%', '70%', '65%', '40%', '10%'];
-        const lefts = ['10%', '85%', '15%', '75%', '45%', '60%'];
+        const tops = ['15%', '25%', '70%', '65%', '40%', '10%', '55%', '80%', '30%', '5%', '90%', '20%'];
+        const lefts = ['10%', '85%', '15%', '75%', '45%', '60%', '5%', '90%', '35%', '12%', '80%', '70%'];
         return {
             char,
-            x: useTransform(smoothedX, [0, 1], [(i % 2 === 0 ? -1 : 1) * 50, (i % 2 === 0 ? 1 : -1) * 50]),
-            y: useTransform(smoothedY, [0, 1], [(i % 3 === 0 ? -1 : 1) * 60, (i % 3 === 0 ? 1 : -1) * 60]),
-            top: tops[i],
-            left: lefts[i]
+            x: useTransform(smoothedX, [0, 1], [(i % 2 === 0 ? -1 : 1) * (50 + i * 5), (i % 2 === 0 ? 1 : -1) * (50 + i * 5)]),
+            y: useTransform(smoothedY, [0, 1], [(i % 3 === 0 ? -1 : 1) * (60 + i * 4), (i % 3 === 0 ? 1 : -1) * (60 + i * 4)]),
+            top: tops[i] || `${(i * 13) % 100}%`,
+            left: lefts[i] || `${(i * 17) % 100}%`
         };
     });
+
+    if (!mounted) return <div className="fixed inset-0 bg-[var(--background)] -z-10" />;
 
     return (
         <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10 bg-[var(--background)]">

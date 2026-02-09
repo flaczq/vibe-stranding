@@ -14,7 +14,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
     providers: [
         Credentials({
+            credentials: {
+                identifier: { label: "Identifier", type: "text" },
+                password: { label: "Password", type: "password" }
+            },
             async authorize(credentials) {
+                console.log("Authorize called with keys:", Object.keys(credentials as any));
+                console.log("Identifier:", (credentials as any).identifier);
+
                 const parsedCredentials = z
                     .object({ identifier: z.string().min(3), password: z.string().min(6) })
                     .safeParse(credentials);
@@ -22,7 +29,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 if (parsedCredentials.success) {
                     const { identifier, password } = parsedCredentials.data;
 
-                    if (!prisma) return null;
+                    if (!prisma) {
+                        console.error("Prisma client not found");
+                        return null;
+                    }
 
                     // Allow login by email or name (username)
                     const user = await prisma.user.findFirst({
@@ -34,11 +44,23 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                         }
                     });
 
-                    if (!user || !user.password) return null;
+                    if (!user) {
+                        console.error("User not found for identifier:", identifier);
+                        return null;
+                    }
+
+                    if (!user.password) {
+                        console.error("User has no password set (possibly oauth user):", identifier);
+                        return null;
+                    }
 
                     const passwordsMatch = await bcrypt.compare(password, user.password);
 
                     if (passwordsMatch) return user;
+
+                    console.error("Password mismatch for user:", identifier);
+                } else {
+                    console.error("Invalid credentials format:", parsedCredentials.error.format());
                 }
 
                 return null;

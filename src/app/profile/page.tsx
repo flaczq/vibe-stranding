@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/lib/auth';
@@ -8,11 +8,19 @@ import { Navbar } from '@/components/ui/Navbar';
 import { XPBar } from '@/components/game/XPBar';
 import { AchievementCard } from '@/components/game/AchievementPopup';
 import { ACHIEVEMENTS, LEVELS, getLevelInfo, CHALLENGES, CATEGORY_INFO } from '@/lib/game-data';
-import { Trophy, Target, Flame, Calendar, LogOut, Settings, ChevronRight } from 'lucide-react';
+import { Trophy, Target, Flame, Calendar, LogOut, Settings, ChevronRight, Check, X } from 'lucide-react';
+import { AVATARS } from '@/lib/auth';
 
 export default function ProfilePage() {
-    const { user, isLoading, logout, t, language } = useAuth();
+    const { user, isLoading, logout, updateAvatar, t, language } = useAuth();
     const router = useRouter();
+    const [isEditingAvatar, setIsEditingAvatar] = useState(false);
+    const [selectedAvatar, setSelectedAvatar] = useState(user?.avatar || '🦊');
+    const [isUpdating, setIsUpdating] = useState(false);
+
+    useEffect(() => {
+        if (user) setSelectedAvatar(user.avatar);
+    }, [user]);
 
     useEffect(() => {
         if (!isLoading && !user) {
@@ -58,10 +66,19 @@ export default function ProfilePage() {
                     <div className="flex flex-col md:flex-row items-center gap-6">
                         {/* Avatar */}
                         <motion.div
-                            className="text-8xl p-4 rounded-full bg-surface"
-                            whileHover={{ scale: 1.1, rotate: 10 }}
+                            className="relative group"
+                            whileHover={{ scale: 1.05 }}
                         >
-                            {user.avatar}
+                            <div className="text-8xl p-4 rounded-full bg-surface">
+                                {user.avatar}
+                            </div>
+                            <button
+                                onClick={() => setIsEditingAvatar(true)}
+                                className="absolute bottom-0 right-0 p-2 bg-primary text-white rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                                title={t.profile.settings}
+                            >
+                                <Settings size={18} />
+                            </button>
                         </motion.div>
 
                         {/* Info */}
@@ -208,7 +225,10 @@ export default function ProfilePage() {
                 >
                     <h2 className="text-xl font-bold mb-4">{t.profile.account}</h2>
                     <div className="space-y-2">
-                        <button className="w-full flex items-center justify-between p-4 rounded-xl bg-surface hover:bg-surface-light transition-colors">
+                        <button
+                            onClick={() => setIsEditingAvatar(true)}
+                            className="w-full flex items-center justify-between p-4 rounded-xl bg-surface hover:bg-surface-light transition-colors"
+                        >
                             <div className="flex items-center gap-3">
                                 <Settings size={20} className="text-foreground-muted" />
                                 <span>{t.profile.settings}</span>
@@ -231,6 +251,90 @@ export default function ProfilePage() {
                     </div>
                 </motion.div>
             </main>
+
+            {/* Avatar Selection Modal */}
+            <AnimatePresence>
+                {isEditingAvatar && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setIsEditingAvatar(false)}
+                            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+                        />
+                        <motion.div
+                            className="relative glass-card p-6 w-full max-w-lg"
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                        >
+                            <div className="flex items-center justify-between mb-6">
+                                <h2 className="text-2xl font-bold">{t.profile.changeAvatar}</h2>
+                                <button onClick={() => setIsEditingAvatar(false)} className="p-2 hover:bg-surface rounded-full">
+                                    <X size={24} />
+                                </button>
+                            </div>
+
+                            <div className="text-center mb-8">
+                                <div className="text-7xl mb-4 p-6 bg-surface rounded-full inline-block">
+                                    {selectedAvatar}
+                                </div>
+                                <p className="text-foreground-muted">{t.profile.selectAvatar}</p>
+                            </div>
+
+                            <div className="grid grid-cols-6 gap-3 mb-8 max-h-48 overflow-y-auto p-2 scrollbar-thin">
+                                {AVATARS.map((avatar) => (
+                                    <button
+                                        key={avatar}
+                                        onClick={() => setSelectedAvatar(avatar)}
+                                        className={`text-2xl p-2 rounded-xl transition-all ${selectedAvatar === avatar
+                                            ? 'bg-primary/20 ring-2 ring-primary scale-110'
+                                            : 'hover:bg-surface'
+                                            }`}
+                                    >
+                                        {avatar}
+                                    </button>
+                                ))}
+                            </div>
+
+                            <div className="flex gap-3">
+                                <button
+                                    onClick={() => setIsEditingAvatar(false)}
+                                    className="flex-1 p-3 rounded-xl bg-surface hover:bg-surface-light transition-colors font-bold"
+                                >
+                                    {t.profile.cancel}
+                                </button>
+                                <button
+                                    onClick={async () => {
+                                        setIsUpdating(true);
+                                        const result = await updateAvatar(selectedAvatar);
+                                        if (result.success) {
+                                            setIsEditingAvatar(false);
+                                        } else {
+                                            alert(result.error);
+                                        }
+                                        setIsUpdating(false);
+                                    }}
+                                    disabled={isUpdating || selectedAvatar === user.avatar}
+                                    className="flex-1 p-3 rounded-xl bg-primary text-white font-bold hover:glow-primary transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                                >
+                                    {isUpdating ? (
+                                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                    ) : (
+                                        <>
+                                            <Check size={18} />
+                                            {t.profile.save}
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }
+
+import { AnimatePresence } from 'framer-motion';

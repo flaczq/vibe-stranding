@@ -100,7 +100,11 @@ export const translations = {
             settings: "Settings",
             logout: "Log Out",
             bestStreak: "Best Streak",
-            dayStreak: "Day Streak"
+            dayStreak: "Day Streak",
+            changeAvatar: "Change Avatar",
+            selectAvatar: "Select your vibe avatar",
+            cancel: "Cancel",
+            save: "Save Changes",
         },
         leaderboard: {
             title: "Leaderboard",
@@ -134,6 +138,21 @@ export const translations = {
                 title: 'Breaking Down Tasks',
                 description: 'Learn to decompose complex requests into smaller prompts',
                 instructions: 'You want to build a simple todo app. Instead of one massive prompt, break it down into 3 smaller, focused prompts.\n\nWrite your first prompt: Create the data structure for a todo item.\nThen think about what the next 2 prompts would be.'
+            }
+        },
+        home: {
+            features: {
+                learn: { title: 'Learn by Doing', desc: 'Interactive challenges that teach you AI-assisted coding from basics to mastery' },
+                compete: { title: 'Earn & Compete', desc: 'Gain XP, unlock achievements, and climb the leaderboards' },
+                speed: { title: 'Speed Challenges', desc: 'Race against the clock in timed coding competitions' },
+                community: { title: 'Community', desc: 'Learn alongside thousands of developers mastering vibe coding' }
+            },
+            levels: {
+                sprout: { name: 'Sprout', desc: 'Learn the basics of AI prompting' },
+                apprentice: { name: 'Apprentice', desc: 'Master intermediate techniques' },
+                developer: { name: 'Developer', desc: 'Build real features with AI' },
+                expert: { name: 'Expert', desc: 'Handle complex challenges' },
+                master: { name: 'Master', desc: 'Full project creation' }
             }
         }
     },
@@ -236,7 +255,11 @@ export const translations = {
             settings: "Ustawienia",
             logout: "Wyloguj się",
             bestStreak: "Najlepsza Seria",
-            dayStreak: "Dzienna Seria"
+            dayStreak: "Dzienna Seria",
+            changeAvatar: "Zmień Awatar",
+            selectAvatar: "Wybierz swój vibe awatar",
+            cancel: "Anuluj",
+            save: "Zapisz Zmiany",
         },
         leaderboard: {
             title: "Ranking",
@@ -270,6 +293,21 @@ export const translations = {
                 title: 'Rozbijanie Zadań',
                 description: 'Naucz się rozkładać złożone prośby na mniejsze polecenia',
                 instructions: 'Chcesz zbudować prostą aplikację todo. Zamiast jednego wielkiego promptu, rozbij go na 3 mniejsze, skoncentrowane polecenia.\n\nNapisz swój pierwszy prompt: Stwórz strukturę danych dla elementu todo.\nNastępnie pomyśl, jakie byłyby kolejne 2 prompty.'
+            }
+        },
+        home: {
+            features: {
+                learn: { title: 'Nauka w Praktyce', desc: 'Interaktywne wyzwania, które uczą kodowania ze wsparciem AI od podstaw do mistrzostwa' },
+                compete: { title: 'Zarabiaj i Rywalizuj', desc: 'Zdobywaj XP, odblokowuj osiągnięcia i wspinaj się w rankingu' },
+                speed: { title: 'Wyzwania Szybkości', desc: 'Ścigaj się z czasem w turniejach kodowania na czas' },
+                community: { title: 'Społeczność', desc: 'Ucz się razem z tysiącami twórców opanowujących vibe coding' }
+            },
+            levels: {
+                sprout: { name: 'Kiełek', desc: 'Poznaj podstawy promptowania AI' },
+                apprentice: { name: 'Czeladnik', desc: 'Opanuj pośrednie techniki' },
+                developer: { name: 'Programista', desc: 'Buduj prawdziwe funkcje z AI' },
+                expert: { name: 'Ekspert', desc: 'Staw czoła złożonym wyzwaniom' },
+                master: { name: 'Mistrz', desc: 'Twórz pełne projekty' }
             }
         }
     }
