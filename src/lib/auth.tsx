@@ -207,17 +207,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = () => signOut({ callbackUrl: "/" });
 
   const updateUser = async (updates: Partial<User>) => {
-    // This would typically be a server action to update DB
-    // For now, we'll use the session update
-    await update(updates);
+    // Avoid using update(updates) to prevent cookie bloat
+    // In a real app, this should call a server action to update the DB
+    // then refresh the local userProfile state.
+    if (session?.user?.id) {
+      const { getUserProfile } = await import('./actions');
+      const updatedProfile = await getUserProfile(session.user.id);
+      if (updatedProfile) setUserProfile(updatedProfile);
+    }
   };
 
   const addXP = async (amount: number) => {
-    if (!user) return;
-    // For production, XP updates should happen via challenge completion server actions
-    // but if we need a manual add:
-    // await updateXpProgress(user.id, amount, 'manual-add');
-    await update(); // Trigger session refresh
+    if (!session?.user?.id) return;
+    // XP updates are now managed via server actions plus local profile refresh
+    // to keep the session cookie lean and avoid 494 errors
+    const { getUserProfile } = await import('./actions');
+    const updatedProfile = await getUserProfile(session.user.id);
+    if (updatedProfile) setUserProfile(updatedProfile);
   };
 
   const updateAvatar = async (newAvatar: string) => {

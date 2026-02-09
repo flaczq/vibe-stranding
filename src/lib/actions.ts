@@ -74,7 +74,7 @@ export async function registerUser(formData: FormData) {
         if (process.env.RESEND_API_KEY) {
             try {
                 await resend.emails.send({
-                    from: process.env.RESEND_FROM || 'Vibe Stranding <hello@send.notifications.zagula.dev>',
+                    from: process.env.RESEND_FROM || 'Vibe Stranding <hello@notifications.zagula.dev>',
                     to: email,
                     subject: `Welcome to the Network, ${username}! 🦀`,
                     react: WelcomeEmail({ username }),

@@ -80,6 +80,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             return session;
         },
         async jwt({ token, user }) {
+            // CRITICAL: Explicitly remove heavy legacy data from token to prevent 494 Request Header Too Large
+            // This ensures if a user had a large cookie before the fix, it gets cleaned up.
+            delete (token as any).avatar;
+            delete (token as any).image;
+            delete (token as any).picture;
+            delete (token as any).completedChallenges;
+            delete (token as any).achievements;
+            delete (token as any).progress;
+
             if (user) {
                 token.id = user.id;
                 token.role = (user as any).role;
