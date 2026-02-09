@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import { signIn } from "@/auth";
+import { signIn, auth } from "@/auth";
 import { AuthError } from "next-auth";
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcryptjs";
@@ -39,6 +39,19 @@ export async function registerUser(formData: FormData) {
         return { error: 'Missing required fields' };
     }
 
+    if (username.length < 3 || username.length > 20) {
+        return { error: 'Username must be between 3 and 20 characters' };
+    }
+
+    if (password.length < 6) {
+        return { error: 'Password must be at least 6 characters' };
+    }
+
+    // Limit avatar size to prevent DB bloat/DoS (e.g. 1MB)
+    if (avatar && avatar.length > 1024 * 1024) {
+        return { error: 'Avatar image is too large' };
+    }
+
     try {
         if (!prisma) {
             return { error: 'Database connection error' };
@@ -73,10 +86,13 @@ export async function registerUser(formData: FormData) {
         // Send Real Welcome Email via Resend
         if (process.env.RESEND_API_KEY) {
             try {
+                // Use the user's picked emoji in the subject if it's not a custom image (base64)
+                const subjectEmoji = (avatar && !avatar.startsWith('data:')) ? avatar : '🦀';
+
                 await resend.emails.send({
                     from: process.env.RESEND_FROM || 'Vibe Stranding <hello@notifications.zagula.dev>',
                     to: email,
-                    subject: `Welcome to the Network, ${username}! 🦀`,
+                    subject: `Welcome to the Network, ${username}! ${subjectEmoji}`,
                     react: WelcomeEmail({ username }),
                 });
             } catch (emailError) {
@@ -94,6 +110,11 @@ export async function registerUser(formData: FormData) {
 
 export async function updateXpProgress(userId: string, xpEarned: number, challengeId: string) {
     try {
+        const session = await auth();
+        if (!session?.user?.id || (session.user.id !== userId && session.user.role !== 'ADMIN')) {
+            return { error: 'Unauthorized' };
+        }
+
         if (!prisma) {
             return { error: 'Database connection error' };
         }
@@ -198,6 +219,15 @@ export async function getChallenge(challengeId: string) {
 
 export async function getUserProfile(userId: string) {
     try {
+        const session = await auth();
+        if (!session?.user?.id) return null;
+
+        // Users can view their own profile, or admins can view any profile
+        // If we want public profiles, we'd remove this check but keep 'select' limited
+        if (session.user.id !== userId && session.user.role !== 'ADMIN') {
+            return null;
+        }
+
         if (!prisma) return null;
 
         const user = await (prisma as any).user.findUnique({
@@ -233,9 +263,13 @@ export async function getUserProfile(userId: string) {
 
 export async function getAllUsers() {
     try {
+        const session = await auth();
+        if (session?.user?.role !== 'ADMIN') {
+            return [];
+        }
+
         if (!prisma) return [];
 
-        // In a real app, you'd check auth().user.role === 'ADMIN' here
         const users = await (prisma as any).user.findMany({
             orderBy: { joinedAt: 'desc' },
             select: {
@@ -259,6 +293,11 @@ export async function getAllUsers() {
 
 export async function deleteUser(userId: string) {
     try {
+        const session = await auth();
+        if (session?.user?.role !== 'ADMIN') {
+            return { error: 'Unauthorized' };
+        }
+
         if (!prisma) return { error: 'DB not available' };
 
         await prisma.user.delete({
@@ -275,6 +314,11 @@ export async function deleteUser(userId: string) {
 
 export async function updateUserAvatar(userId: string, avatar: string) {
     try {
+        const session = await auth();
+        if (!session?.user?.id || (session.user.id !== userId && session.user.role !== 'ADMIN')) {
+            return { error: 'Unauthorized' };
+        }
+
         if (!prisma) return { error: 'DB not available' };
 
         await prisma.user.update({

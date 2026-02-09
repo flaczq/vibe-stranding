@@ -44,7 +44,7 @@ export const WelcomeEmail = ({
                 <Section style={btnContainer}>
                     <Link
                         style={button}
-                        href="https://vibestranding.vercel.app/dashboard"
+                        href="https://vibe-stranding.vercel.app/dashboard"
                     >
                         Enter the Dashboard
                     </Link>
@@ -61,6 +61,9 @@ export const WelcomeEmail = ({
                     <br />
                     Keep coding, keep vibing.
                 </Text>
+                <Text style={spamNotice}>
+                    We hate spam too. We only send relevant network updates.
+                </Text>
             </Container>
         </Body>
     </Html>
@@ -69,7 +72,7 @@ export const WelcomeEmail = ({
 export default WelcomeEmail;
 
 const main = {
-    backgroundColor: '#050505',
+    backgroundColor: '#0f0f0f',
     fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif',
 };
 
@@ -107,7 +110,7 @@ const text = {
 };
 
 const statsSection = {
-    backgroundColor: '#151515',
+    backgroundColor: '#1a1a1a',
     padding: '24px',
     borderRadius: '12px',
     margin: '30px 0',
@@ -148,4 +151,12 @@ const footer = {
     fontSize: '12px',
     textAlign: 'center' as const,
     marginTop: '40px',
+};
+
+const spamNotice = {
+    color: '#555',
+    fontSize: '11px',
+    textAlign: 'center' as const,
+    marginTop: '10px',
+    fontStyle: 'italic',
 };
