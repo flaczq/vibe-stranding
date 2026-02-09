@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { useAuth } from '@/lib/auth';
 import { Navbar } from '@/components/ui/Navbar';
 import { Leaderboard } from '@/components/game/Leaderboard';
+import { Avatar } from '@/components/ui/Avatar';
 import { getLeaderboard } from '@/lib/actions';
 import { Trophy, TrendingUp, Calendar, Award } from 'lucide-react';
 
@@ -76,7 +77,7 @@ export default function LeaderboardPage() {
                 >
                     <div className="flex flex-wrap items-center justify-between gap-4">
                         <div className="flex items-center gap-4">
-                            <div className="text-5xl">{user.avatar}</div>
+                            <Avatar src={user.avatar} alt={user.username} size="2xl" />
                             <div>
                                 <h2 className="text-2xl font-bold">{user.username}</h2>
                                 <p className="text-foreground-muted">{t.profile.level} {user.level}</p>

@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Achievement, ACHIEVEMENTS } from '@/lib/game-data';
 import { X } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useAuth } from '@/lib/auth';
 
 interface AchievementPopupProps {
     achievementId: string | null;
@@ -11,6 +12,7 @@ interface AchievementPopupProps {
 }
 
 export function AchievementPopup({ achievementId, onClose }: AchievementPopupProps) {
+    const { t } = useAuth();
     const [achievement, setAchievement] = useState<Achievement | null>(null);
 
     useEffect(() => {
@@ -75,7 +77,7 @@ export function AchievementPopup({ achievementId, onClose }: AchievementPopupPro
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.3 }}
                         >
-                            Achievement Unlocked!
+                            {t.common.unlocked}
                         </motion.h2>
 
                         {/* Achievement name */}
@@ -118,6 +120,7 @@ export function AchievementPopup({ achievementId, onClose }: AchievementPopupPro
 
 // Simple achievement card for lists
 export function AchievementCard({ achievement, unlocked }: { achievement: Achievement; unlocked: boolean }) {
+    const { t } = useAuth();
     return (
         <div
             className={`glass-card p-4 flex items-center gap-4 transition-all duration-300 ${unlocked ? 'opacity-100' : 'opacity-50 grayscale'
@@ -131,7 +134,7 @@ export function AchievementCard({ achievement, unlocked }: { achievement: Achiev
                     {achievement.secret && !unlocked ? '???' : achievement.name}
                 </h3>
                 <p className="text-sm text-foreground-muted">
-                    {achievement.secret && !unlocked ? 'Secret achievement' : achievement.description}
+                    {achievement.secret && !unlocked ? t.common.secretInfo : achievement.description}
                 </p>
             </div>
             {unlocked && achievement.xpBonus > 0 && (

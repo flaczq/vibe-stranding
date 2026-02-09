@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { Home, BookOpen, Swords, Trophy, User, LogOut, Menu, X, Sun, Moon, Globe, Skull } from 'lucide-react';
 import { useAuth } from '@/lib/auth';
 import { MiniXPBar } from '@/components/game/XPBar';
+import { Avatar } from '@/components/ui/Avatar';
 import { useState, useEffect } from 'react';
 
 export function Navbar() {
@@ -88,7 +89,7 @@ export function Navbar() {
 
                         <MiniXPBar />
                         <div className="flex items-center gap-2">
-                            <span className="text-2xl">{user.avatar}</span>
+                            <Avatar src={user.avatar} alt={user.username} size="sm" />
                             <span className="font-medium text-sm">{user.username}</span>
                         </div>
                         <button
@@ -121,7 +122,7 @@ export function Navbar() {
                     <div className="px-4 py-4 space-y-2">
                         {/* User info */}
                         <div className="flex items-center gap-3 pb-3 border-b border-surface-light">
-                            <span className="text-3xl">{user.avatar}</span>
+                            <Avatar src={user.avatar} alt={user.username} size="lg" border />
                             <div>
                                 <p className="font-semibold">{user.username}</p>
                                 <p className="text-sm text-xp">{user.xp} XP</p>

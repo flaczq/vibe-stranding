@@ -5,11 +5,13 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/lib/auth';
 import { Navbar } from '@/components/ui/Navbar';
+import { Avatar as UserAvatar } from '@/components/ui/Avatar';
 import { XPBar } from '@/components/game/XPBar';
 import { AchievementCard } from '@/components/game/AchievementPopup';
 import { ACHIEVEMENTS, LEVELS, getLevelInfo, CHALLENGES, CATEGORY_INFO } from '@/lib/game-data';
-import { Trophy, Target, Flame, Calendar, LogOut, Settings, ChevronRight, Check, X } from 'lucide-react';
+import { Trophy, Target, Flame, Calendar, LogOut, Settings, ChevronRight, Check, X, Upload } from 'lucide-react';
 import { AVATARS } from '@/lib/auth';
+import { useRef } from 'react';
 
 export default function ProfilePage() {
     const { user, isLoading, logout, updateAvatar, t, language } = useAuth();
@@ -17,6 +19,26 @@ export default function ProfilePage() {
     const [isEditingAvatar, setIsEditingAvatar] = useState(false);
     const [selectedAvatar, setSelectedAvatar] = useState(user?.avatar || '🦊');
     const [isUpdating, setIsUpdating] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        // Check file size (max 500kb for Base64 storage in this demo)
+        if (file.size > 500 * 1024) {
+            alert(language === 'pl' ? 'Obrazek jest za duży (max 500KB)' : 'Image is too large (max 500KB)');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            if (event.target?.result) {
+                setSelectedAvatar(event.target.result as string);
+            }
+        };
+        reader.readAsDataURL(file);
+    };
 
     useEffect(() => {
         if (user) setSelectedAvatar(user.avatar);
@@ -69,9 +91,13 @@ export default function ProfilePage() {
                             className="relative group"
                             whileHover={{ scale: 1.05 }}
                         >
-                            <div className="text-8xl p-4 rounded-full bg-surface">
-                                {user.avatar}
-                            </div>
+                            <UserAvatar
+                                src={user.avatar}
+                                alt={user.username}
+                                size="2xl"
+                                border
+                                className="shadow-xl group-hover:border-primary/50 transition-colors"
+                            />
                             <button
                                 onClick={() => setIsEditingAvatar(true)}
                                 className="absolute bottom-0 right-0 p-2 bg-primary text-white rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
@@ -277,10 +303,32 @@ export default function ProfilePage() {
                             </div>
 
                             <div className="text-center mb-8">
-                                <div className="text-7xl mb-4 p-6 bg-surface rounded-full inline-block">
-                                    {selectedAvatar}
+                                <div className="flex justify-center mb-4">
+                                    <UserAvatar
+                                        src={selectedAvatar}
+                                        alt="Selected"
+                                        size="2xl"
+                                        border
+                                        className="shadow-inner"
+                                    />
                                 </div>
-                                <p className="text-foreground-muted">{t.profile.selectAvatar}</p>
+                                <p className="text-foreground-muted mb-4">{t.profile.selectAvatar}</p>
+
+                                <input
+                                    type="file"
+                                    ref={fileInputRef}
+                                    onChange={handleFileUpload}
+                                    accept="image/*"
+                                    className="hidden"
+                                />
+
+                                <button
+                                    onClick={() => fileInputRef.current?.click()}
+                                    className="mx-auto flex items-center gap-2 px-4 py-2 rounded-lg bg-surface border border-surface-light hover:border-primary/50 text-sm font-medium transition-all group"
+                                >
+                                    <Upload size={16} className="text-primary group-hover:scale-110 transition-transform" />
+                                    {t.profile.uploadCustom}
+                                </button>
                             </div>
 
                             <div className="grid grid-cols-6 gap-3 mb-8 max-h-48 overflow-y-auto p-2 scrollbar-thin">

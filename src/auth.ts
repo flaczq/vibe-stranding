@@ -72,33 +72,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             try {
                 if (token.sub && session.user) {
                     session.user.id = token.sub;
-
-                    if (!prisma) return session;
-
-                    const dbUser = await (prisma as any).user.findUnique({
-                        where: { id: token.sub },
-                        select: {
-                            xp: true,
-                            level: true,
-                            image: true,
-                            role: true,
-                            emailVerified: true,
-                            currentStreak: true,
-                            progress: { select: { challengeId: true } },
-                            achievements: { select: { achievementId: true } }
-                        }
-                    });
-
-                    if (dbUser) {
-                        session.user.xp = dbUser.xp ?? 0;
-                        session.user.level = dbUser.level ?? 1;
-                        session.user.avatar = dbUser.image || "🦊";
-                        session.user.role = dbUser.role || "USER";
-                        session.user.emailVerified = dbUser.emailVerified || null;
-                        session.user.currentStreak = dbUser.currentStreak ?? 0;
-                        session.user.completedChallenges = dbUser.progress?.map((p: any) => p.challengeId) || [];
-                        session.user.achievements = dbUser.achievements?.map((a: any) => a.achievementId) || [];
-                    }
+                    session.user.role = (token as any).role || "USER";
                 }
             } catch (error) {
                 console.error("Session callback error:", error);

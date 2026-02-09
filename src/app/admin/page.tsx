@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/lib/auth';
 import { Navbar } from '@/components/ui/Navbar';
+import { Avatar } from '@/components/ui/Avatar';
 import { getAllUsers, deleteUser } from '@/lib/actions';
 import {
     Users,
@@ -181,7 +182,7 @@ export default function AdminPage() {
                                             >
                                                 <td className="p-4">
                                                     <div className="flex items-center gap-3">
-                                                        <span className="text-2xl">{u.image || '🦊'}</span>
+                                                        <Avatar src={u.image} alt={u.name} size="sm" />
                                                         <div>
                                                             <div className="font-bold flex items-center gap-2">
                                                                 {u.name}
@@ -220,8 +221,8 @@ export default function AdminPage() {
                                                         onClick={() => handleDelete(u.id)}
                                                         disabled={u.id === user.id || isDeleting === u.id}
                                                         className={`p-2 rounded-lg transition-colors ${u.id === user.id
-                                                                ? 'opacity-20 cursor-not-allowed text-foreground-muted'
-                                                                : 'text-danger hover:bg-danger/10'
+                                                            ? 'opacity-20 cursor-not-allowed text-foreground-muted'
+                                                            : 'text-danger hover:bg-danger/10'
                                                             }`}
                                                         title={u.id === user.id ? "You cannot delete yourself" : "Delete User"}
                                                     >

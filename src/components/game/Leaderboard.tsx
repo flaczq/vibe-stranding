@@ -2,6 +2,8 @@
 
 import { motion } from 'framer-motion';
 import { Trophy, Medal, Award } from 'lucide-react';
+import { useAuth } from '@/lib/auth';
+import { Avatar } from '@/components/ui/Avatar';
 
 interface LeaderboardEntry {
     rank: number;
@@ -17,7 +19,9 @@ interface LeaderboardProps {
     title?: string;
 }
 
-export function Leaderboard({ entries, title = 'Leaderboard' }: LeaderboardProps) {
+export function Leaderboard({ entries, title }: LeaderboardProps) {
+    const { t } = useAuth();
+    const displayTitle = title || t.leaderboard.title;
     const topThree = entries.slice(0, 3);
     const others = entries.slice(3);
 
@@ -47,7 +51,7 @@ export function Leaderboard({ entries, title = 'Leaderboard' }: LeaderboardProps
         <div className="glass-card p-6">
             <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
                 <Trophy className="text-xp" size={24} />
-                {title}
+                {displayTitle}
             </h2>
 
             {/* Podium Section */}
@@ -60,7 +64,14 @@ export function Leaderboard({ entries, title = 'Leaderboard' }: LeaderboardProps
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 }}
                     >
-                        <div className="text-3xl mb-1">{topThree[1].avatar}</div>
+                        <div className="mb-1">
+                            <Avatar
+                                src={topThree[1].avatar}
+                                alt={topThree[1].username}
+                                size="lg"
+                                className="border-2 border-gray-300/30"
+                            />
+                        </div>
                         <div className="w-16 h-20 bg-gray-300/20 border-t-2 border-gray-300/50 rounded-t-lg flex flex-col items-center justify-start pt-2">
                             <span className="font-bold text-gray-300">2</span>
                             <Medal size={16} className="text-gray-300" />
@@ -84,7 +95,14 @@ export function Leaderboard({ entries, title = 'Leaderboard' }: LeaderboardProps
                         >
                             👑
                         </motion.div>
-                        <div className="text-3xl mb-1">{topThree[0].avatar}</div>
+                        <div className="mb-1">
+                            <Avatar
+                                src={topThree[0].avatar}
+                                alt={topThree[0].username}
+                                size="xl"
+                                className="border-4 border-yellow-400/50 shadow-lg shadow-yellow-400/20"
+                            />
+                        </div>
                         <div className="w-20 h-28 bg-yellow-400/20 border-t-4 border-yellow-400 rounded-t-lg flex flex-col items-center justify-start pt-2 shadow-lg shadow-yellow-400/10">
                             <span className="font-bold text-yellow-400 text-xl">1</span>
                             <Trophy size={20} className="text-yellow-400" />
@@ -101,7 +119,14 @@ export function Leaderboard({ entries, title = 'Leaderboard' }: LeaderboardProps
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3 }}
                     >
-                        <div className="text-3xl mb-1">{topThree[2].avatar}</div>
+                        <div className="mb-1">
+                            <Avatar
+                                src={topThree[2].avatar}
+                                alt={topThree[2].username}
+                                size="lg"
+                                className="border-2 border-amber-600/30"
+                            />
+                        </div>
                         <div className="w-16 h-16 bg-amber-600/20 border-t-2 border-amber-600/50 rounded-t-lg flex flex-col items-center justify-start pt-2">
                             <span className="font-bold text-amber-600">3</span>
                             <Award size={16} className="text-amber-600" />
@@ -124,13 +149,17 @@ export function Leaderboard({ entries, title = 'Leaderboard' }: LeaderboardProps
                         {/* Rank */}
                         <div className="w-8 flex justify-center">{getRankIcon(entry.rank)}</div>
 
-                        {/* Avatar */}
-                        <div className="text-2xl">{entry.avatar}</div>
+                        <Avatar
+                            src={entry.avatar}
+                            alt={entry.username}
+                            size="md"
+                            className="border border-surface-light"
+                        />
 
                         {/* Username & Level */}
                         <div className="flex-1 min-w-0">
                             <p className="font-semibold text-foreground truncate">{entry.username}</p>
-                            <p className="text-[10px] text-foreground-muted uppercase tracking-wider">Level {entry.level}</p>
+                            <p className="text-[10px] text-foreground-muted uppercase tracking-wider">{t.profile.level} {entry.level}</p>
                         </div>
 
                         {/* XP */}

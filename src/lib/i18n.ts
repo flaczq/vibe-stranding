@@ -3,6 +3,15 @@ export type Language = 'en' | 'pl';
 export const translations = {
     en: {
         appName: "Vibe Stranding",
+        common: {
+            viewAll: "View all",
+            more: "more",
+            of: "of",
+            unlocked: "Unlocked!",
+            secretInfo: "Secret achievement",
+            active: "ACTIVE",
+            vibePulse: "Vibe Pulse Active",
+        },
         nav: {
             dashboard: "Dashboard",
             learn: "Learn",
@@ -36,7 +45,14 @@ export const translations = {
                 totalXp: "Total XP",
                 completed: "completed",
                 days: "days",
-                earned: "earned"
+                earned: "earned",
+                of: "of"
+            },
+            sections: {
+                vibeStatus: "Vibe Status",
+                recommended: "Recommended Challenges",
+                yourJourney: "Your Journey",
+                topVibers: "Top Vibers",
             },
             actions: {
                 continue: "Continue Learning",
@@ -56,7 +72,13 @@ export const translations = {
                 tip3: "Review the Aura ✨",
                 tip3Desc: "Never just copy-paste. Read the code to ensure it matches your project's soul.",
                 tip4: "Use Pseudo-Code 🧠",
-                tip4Desc: "Ask the AI to outline the logic first before writing a single line of implementation."
+                tip4Desc: "Ask the AI to outline the logic first before writing a single line of implementation.",
+                firstSteps: "First steps!",
+                firstStepsDesc: 'Complete "Your First Prompt" to start your journey.',
+                contextKing: "Context is King!",
+                contextKingDesc: "Complete the context challenge to earn bonus XP.",
+                breakDown: "Break it Down!",
+                breakDownDesc: "Master prompt decomposition for complex tasks.",
             },
             quest: {
                 title: "Daily Quest",
@@ -105,6 +127,8 @@ export const translations = {
             selectAvatar: "Select your vibe avatar",
             cancel: "Cancel",
             save: "Save Changes",
+            uploadCustom: "Upload Image",
+            chooseFile: "Choose File",
         },
         leaderboard: {
             title: "Leaderboard",
@@ -112,6 +136,8 @@ export const translations = {
             allTimeRank: "All-Time Rank",
             totalXP: "Total XP",
             challenges: "Challenges",
+            toNextLevel: "to next level",
+            maxLevel: "Max Level Achieved!",
             allTimeTitle: "All-Time Rankings",
             weeklyTitle: "This Week",
             motivation: "Complete more challenges to climb the ranks! 🚀"
@@ -124,21 +150,28 @@ export const translations = {
             master: "Master"
         },
         challenges: {
-            'prompt-basics-1': {
-                title: 'Your First Prompt',
-                description: 'Learn how to write a clear, effective prompt for an AI assistant',
-                instructions: 'Write a prompt that asks an AI to explain what "vibe coding" is to a complete beginner. Make it concise and use a friendly tone.'
-            },
-            'prompt-basics-2': {
-                title: 'Context is King',
-                description: 'Learn to provide context in your prompts for better results',
-                instructions: 'You are building a React component for a weather app. Write a prompt to create a "WeatherCard" component, providing context about the UI style (modern, glassmorphism) and the data it should display (temp, condition, city).'
-            },
-            'prompt-basics-3': {
-                title: 'Breaking Down Tasks',
-                description: 'Learn to decompose complex requests into smaller prompts',
-                instructions: 'You want to build a simple todo app. Instead of one massive prompt, break it down into 3 smaller, focused prompts.\n\nWrite your first prompt: Create the data structure for a todo item.\nThen think about what the next 2 prompts would be.'
-            }
+            'prompt-basics-1': { title: 'Your First Prompt', description: 'Learn how to write a clear, effective prompt for an AI assistant' },
+            'prompt-basics-2': { title: 'Context is King', description: 'Learn to provide context in your prompts for better results' },
+            'prompt-basics-3': { title: 'Breaking Down Tasks', description: 'Learn to decompose complex requests into smaller prompts' },
+            'prompt-basics-4': { title: 'Persona Crafting', description: 'Learn how to make the AI act as a specific professional' },
+            'prompt-basics-5': { title: 'Zero-Shot vs Few-Shot', description: 'Understand the difference between asking and showing examples' },
+            'prompt-basics-6': { title: 'The Art of Precision', description: 'Learn to avoid ambiguity in your requests' },
+            'chain-prompting-1': { title: 'Prompt Chaining', description: 'Build on previous AI outputs to create complex solutions' },
+            'debug-ai-1': { title: 'AI Generated Bug Hunt', description: 'Learn to identify and fix issues in AI-generated code' },
+            'refactor-ai-1': { title: 'Prompt for Refactoring', description: 'Learn to write prompts that improve existing code' },
+            'conditional-prompts-1': { title: 'Logic Branching', description: 'Prompts that change behavior based on system input' },
+            'style-refactor-1': { title: 'Clean Architecture Basics', description: 'Refactor small functions for better testability' },
+            'interactive-debug-1': { title: 'Interactive Debugging', description: 'Using AI as a pair programmer to hunt logic errors' },
+            'feature-complete-1': { title: 'Full Feature Build', description: 'Use AI to build a complete feature from scratch' },
+            'speed-challenge-1': { title: 'Speed Coding: Form Validation', description: 'Build a form validation system as fast as possible' },
+            'api-integration-1': { title: 'API Bridge', description: 'Connect AI logic to real-world data sources' },
+            'speed-state-1': { title: 'State Management Race', description: 'Implement a complex cart state machine under pressure' },
+            'architecture-1': { title: 'System Architecture', description: 'Design a complete system architecture with AI assistance' },
+            'complex-debug-1': { title: 'Production Bug Hunt', description: 'Debug a complex, multi-file issue with AI assistance' },
+            'security-expert-1': { title: 'Security First', description: 'Fortifying applications against vulnerabilities' },
+            'perf-refactor-1': { title: 'Performance Tuning', description: 'Using AI to identify bottlenecks in large datasets' },
+            'full-app-1': { title: 'Full Application Build', description: 'Build a complete application from concept to deployment' },
+            'saas-architecture-1': { title: 'AI SaaS Blueprint', description: 'Architecting the future of subscription services' },
         },
         home: {
             features: {
@@ -158,6 +191,15 @@ export const translations = {
     },
     pl: {
         appName: "Vibe Stranding",
+        common: {
+            viewAll: "Zobacz wszystko",
+            more: "więcej",
+            of: "z",
+            unlocked: "Odblokowano!",
+            secretInfo: "Tajemnicze osiągnięcie",
+            active: "AKTYWNE",
+            vibePulse: "Puls Vibe Aktywny",
+        },
         nav: {
             dashboard: "Panel",
             learn: "Nauka",
@@ -191,7 +233,14 @@ export const translations = {
                 totalXp: "Suma XP",
                 completed: "ukończonych",
                 days: "dni",
-                earned: "zdobytych"
+                earned: "zdobytych",
+                of: "z"
+            },
+            sections: {
+                vibeStatus: "Status Vibe",
+                recommended: "Polecane Wyzwania",
+                yourJourney: "Twoja Podróż",
+                topVibers: "Najlepsi Viberzy",
             },
             actions: {
                 continue: "Kontynuuj Naukę",
@@ -211,7 +260,13 @@ export const translations = {
                 tip3: "Sprawdź Aurę ✨",
                 tip3Desc: "Nigdy tylko nie kopiuj-wklejaj. Przeczytaj kod, aby upewnić się, że pasuje do duszy projektu.",
                 tip4: "Używaj Pseudo-kodu 🧠",
-                tip4Desc: "Poproś AI o zarysowanie logiki przed napisaniem jakiejkolwiek implementacji."
+                tip4Desc: "Poproś AI o zarysowanie logiki przed napisaniem jakiejkolwiek implementacji.",
+                firstSteps: "Pierwsze kroki!",
+                firstStepsDesc: 'Ukończ "Twój Pierwszy Prompt", aby rozpocząć podróż.',
+                contextKing: "Kontekst to Król!",
+                contextKingDesc: "Ukończ wyzwanie kontekstowe, aby zdobyć bonusowe XP.",
+                breakDown: "Rozbijanie Zadań!",
+                breakDownDesc: "Opanuj dekompozycję promptów dla złożonych zadań.",
             },
             quest: {
                 title: "Codzienne Zadanie",
@@ -260,6 +315,8 @@ export const translations = {
             selectAvatar: "Wybierz swój vibe awatar",
             cancel: "Anuluj",
             save: "Zapisz Zmiany",
+            uploadCustom: "Załaduj Zdjęcie",
+            chooseFile: "Wybierz Plik",
         },
         leaderboard: {
             title: "Ranking",
@@ -267,6 +324,8 @@ export const translations = {
             allTimeRank: "Ranking Ogólny",
             totalXP: "Suma XP",
             challenges: "Wyzwania",
+            toNextLevel: "do nast. poziomu",
+            maxLevel: "Maksymalny Poziom!",
             allTimeTitle: "Ranking Ogólny",
             weeklyTitle: "W Tym Tygodniu",
             motivation: "Ukończ więcej wyzwań, aby wspiąć się w rankingu! 🚀"
@@ -279,21 +338,28 @@ export const translations = {
             master: "Mistrz"
         },
         challenges: {
-            'prompt-basics-1': {
-                title: 'Twój Pierwszy Prompt',
-                description: 'Naucz się pisać jasne i skuteczne polecenia dla asystenta AI',
-                instructions: 'Napisz prompt, który prosi AI o wyjaśnienie całkowitemu początkującemu, czym jest "vibe coding". Zrób to zwięźle i użyj przyjaznego tonu.'
-            },
-            'prompt-basics-2': {
-                title: 'Kontekst to Król',
-                description: 'Naucz się dostarczać kontekst w swoich promptach dla lepszych rezultatów',
-                instructions: 'Budujesz komponent React dla aplikacji pogodowej. Napisz prompt, aby stworzyć komponent "WeatherCard", podając kontekst dotyczący stylu UI (nowoczesny, glassmorphism) oraz danych, które powinien wyświetlać (temperatura, warunki, miasto).'
-            },
-            'prompt-basics-3': {
-                title: 'Rozbijanie Zadań',
-                description: 'Naucz się rozkładać złożone prośby na mniejsze polecenia',
-                instructions: 'Chcesz zbudować prostą aplikację todo. Zamiast jednego wielkiego promptu, rozbij go na 3 mniejsze, skoncentrowane polecenia.\n\nNapisz swój pierwszy prompt: Stwórz strukturę danych dla elementu todo.\nNastępnie pomyśl, jakie byłyby kolejne 2 prompty.'
-            }
+            'prompt-basics-1': { title: 'Twój Pierwszy Prompt', description: 'Naucz się pisać jasne i skuteczne polecenia dla asystenta AI' },
+            'prompt-basics-2': { title: 'Kontekst to Król', description: 'Naucz się dostarczać kontekst w swoich promptach dla lepszych rezultatów' },
+            'prompt-basics-3': { title: 'Rozbijanie Zadań', description: 'Naucz się rozkładać złożone prośby na mniejsze polecenia' },
+            'prompt-basics-4': { title: 'Tworzenie Persony', description: 'Dowiedz się, jak sprawić, by AI działało jako konkretny profesjonalista' },
+            'prompt-basics-5': { title: 'Zero-Shot vs Few-Shot', description: 'Zrozum różnicę między zadawaniem pytań a pokazywaniem przykładów' },
+            'prompt-basics-6': { title: 'Sztuka Precyzji', description: 'Naucz się unikać niejednoznaczności w swoich prośbach' },
+            'chain-prompting-1': { title: 'Łańcuch Promptów', description: 'Buduj na wcześniejszych wynikach AI, aby tworzyć złożone rozwiązania' },
+            'debug-ai-1': { title: 'Polowanie na Bugi AI', description: 'Naucz się identyfikować i naprawiać błędy w kodzie wygenerowanym przez AI' },
+            'refactor-ai-1': { title: 'Prompt do Refaktoryzacji', description: 'Naucz się pisać prompty, które ulepszają istniejący kod' },
+            'conditional-prompts-1': { title: 'Rozgałęzianie Logiki', description: 'Prompty, które zmieniają zachowanie na podstawie danych systemowych' },
+            'style-refactor-1': { title: 'Podstawy Czystej Architektury', description: 'Refaktoryzuj małe funkcje dla lepszej testowalności' },
+            'interactive-debug-1': { title: 'Interaktywne Debugowanie', description: 'Używanie AI jako partnera do poszukiwania błędów logicznych' },
+            'feature-complete-1': { title: 'Budowa Pełnej Funkcji', description: 'Użyj AI, aby zbudować kompletną funkcję od podstaw' },
+            'speed-challenge-1': { title: 'Szybkie Kodowanie: Walidacja Formularzy', description: 'Zbuduj system walidacji formularzy tak szybko, jak to możliwe' },
+            'api-integration-1': { title: 'Most API', description: 'Połącz logikę AI z rzeczywistymi źródłami danych' },
+            'speed-state-1': { title: 'Wyścig Zarządzania Stanem', description: 'Zaimplementuj złożoną maszynę stanu koszyka pod presją czasu' },
+            'architecture-1': { title: 'Architektura Systemów', description: 'Zaprojektuj kompletną architekturę systemu ze wsparciem AI' },
+            'complex-debug-1': { title: 'Polowanie na Bugi Produkcyjne', description: 'Debuguj złożone, wieloplikowe problemy ze wsparciem AI' },
+            'security-expert-1': { title: 'Bezpieczeństwo Przede Wszystkim', description: 'Wzmacnianie aplikacji przeciwko lukom w zabezpieczeniach' },
+            'perf-refactor-1': { title: 'Strojenie Wydajności', description: 'Używanie AI do identyfikowania wąskich gardeł w dużych zbiorach danych' },
+            'full-app-1': { title: 'Budowa Pełnej Aplikacji', description: 'Zbuduj kompletną aplikację od koncepcji do wdrożenia' },
+            'saas-architecture-1': { title: 'Plan Systemu AI SaaS', description: 'Projektowanie przyszłości usług subskrypcyjnych' },
         },
         home: {
             features: {

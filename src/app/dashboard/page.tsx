@@ -9,7 +9,8 @@ import { Navbar } from '@/components/ui/Navbar';
 import { XPBar } from '@/components/game/XPBar';
 import { ChallengeCard } from '@/components/game/ChallengeCard';
 import { Leaderboard, generateMockLeaderboard } from '@/components/game/Leaderboard';
-import { CHALLENGES, LEVELS, getLevelInfo, ACHIEVEMENTS } from '@/lib/game-data';
+import { Avatar } from '@/components/ui/Avatar';
+import { LEVELS, CHALLENGES, ACHIEVEMENTS, getLevelInfo, seededShuffle, type Challenge } from '@/lib/game-data';
 import { getLeaderboard } from '@/lib/actions';
 import { BookOpen, Swords, Trophy, Flame, Target, Zap, Sparkles } from 'lucide-react';
 
@@ -41,7 +42,8 @@ export default function DashboardPage() {
     }
 
     const levelInfo = getLevelInfo(user.level);
-    const recentChallenges = CHALLENGES.filter(c => c.difficulty <= user.level).slice(0, 3);
+    const availableChallenges = CHALLENGES.filter(c => c.difficulty <= user.level);
+    const recentChallenges = seededShuffle(availableChallenges, user.id).slice(0, 3);
     const unlockedAchievements = ACHIEVEMENTS.filter(a => user.achievements.includes(a.id));
 
     // Stats cards data
@@ -65,7 +67,7 @@ export default function DashboardPage() {
             label: t.dashboard.stats.achievements,
             value: unlockedAchievements.length,
             color: '#8b5cf6',
-            subtext: `${language === 'pl' ? 'z' : 'of'} ${ACHIEVEMENTS.length}`
+            subtext: `${t.dashboard.stats.of} ${ACHIEVEMENTS.length}`
         },
         {
             icon: Zap,
@@ -90,7 +92,15 @@ export default function DashboardPage() {
                 >
                     <h1 className="text-3xl md:text-4xl font-bold mb-2">
                         {theme === 'stranding' ? t.dashboard.stillBreathing : t.dashboard.welcome}
-                        <span className="text-primary">{user.username}</span>! {user.avatar}
+                        <span className="text-primary">{user.username}</span>!
+                        <span className="inline-flex items-center ml-2 translate-y-1">
+                            <Avatar
+                                src={user.avatar}
+                                alt={user.username}
+                                size="md"
+                                border
+                            />
+                        </span>
                     </h1>
                     <p className="text-foreground-muted text-lg">
                         {theme === 'stranding'
@@ -248,8 +258,8 @@ export default function DashboardPage() {
                                                 </div>
                                                 <h2 className="text-xl font-bold">{t.dashboard.quest.title}</h2>
                                             </div>
-                                            <p className="text-foreground font-semibold mb-2">{language === 'pl' && quest.title === 'First steps!' ? 'Pierwsze kroki!' : quest.title}</p>
-                                            <p className="text-sm text-foreground-muted mb-4">{language === 'pl' && quest.id === 'prompt-basics-1' ? 'Ukończ "Twój Pierwszy Prompt", aby rozpocząć podróż.' : quest.desc}</p>
+                                            <p className="text-foreground font-semibold mb-2">{(t.dashboard.tips as any)[quest.id.replace('prompt-basics-', 'questTitle')] || (quest.id === 'prompt-basics-1' ? t.dashboard.tips.firstSteps : quest.id === 'prompt-basics-2' ? t.dashboard.tips.contextKing : t.dashboard.tips.breakDown)}</p>
+                                            <p className="text-sm text-foreground-muted mb-4">{(t.dashboard.tips as any)[quest.id.replace('prompt-basics-', 'questDesc')] || (quest.id === 'prompt-basics-1' ? t.dashboard.tips.firstStepsDesc : quest.id === 'prompt-basics-2' ? t.dashboard.tips.contextKingDesc : t.dashboard.tips.breakDownDesc)}</p>
                                             <div className="flex items-center justify-between">
                                                 <div className="badge badge-xp">+100 Bonus XP</div>
                                                 <Link href={quest.target}>
@@ -272,13 +282,13 @@ export default function DashboardPage() {
                             >
                                 <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
                                     <Zap size={20} className="text-secondary" />
-                                    Vibe Status
+                                    {t.dashboard.sections.vibeStatus}
                                 </h2>
                                 <div className="space-y-4">
                                     {[
-                                        { label: 'Prompting', color: '#8b5cf6', category: 'prompting' },
-                                        { label: 'Debugging', color: '#ef4444', category: 'debugging' },
-                                        { label: 'Building', color: '#22c55e', category: 'building' },
+                                        { label: t.categories.prompting, color: '#8b5cf6', category: 'prompting' },
+                                        { label: t.categories.debugging, color: '#ef4444', category: 'debugging' },
+                                        { label: t.categories.building, color: '#22c55e', category: 'building' },
                                     ].map((cat) => {
                                         const categoryChallenges = CHALLENGES.filter(c => c.category === cat.category);
                                         const completed = categoryChallenges.filter(c => user.completedChallenges.includes(c.id)).length;
@@ -315,13 +325,13 @@ export default function DashboardPage() {
                             transition={{ duration: 0.5, delay: 0.7 }}
                         >
                             <div className="flex items-center justify-between mb-4">
-                                <h2 className="text-xl font-bold">Recommended Challenges</h2>
+                                <h2 className="text-xl font-bold">{t.dashboard.sections.recommended}</h2>
                                 <Link href="/learn" className="text-primary hover:text-secondary transition-colors text-sm">
-                                    View all →
+                                    {t.common.viewAll} →
                                 </Link>
                             </div>
                             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                {recentChallenges.map((challenge, index) => (
+                                {recentChallenges.map((challenge: Challenge, index: number) => (
                                     <motion.div
                                         key={challenge.id}
                                         initial={{ opacity: 0, y: 20 }}
@@ -345,10 +355,10 @@ export default function DashboardPage() {
                             transition={{ duration: 0.5, delay: 0.8 }}
                         >
                             <div className="flex items-center justify-between mb-4">
-                                <h2 className="text-xl font-bold">Your Journey</h2>
+                                <h2 className="text-xl font-bold">{t.dashboard.sections.yourJourney}</h2>
                                 <div className="flex items-center gap-2">
                                     <div className="w-2 h-2 rounded-full bg-success animate-ping" />
-                                    <span className="text-xs text-foreground-muted uppercase tracking-widest font-bold">Vibe Pulse Active</span>
+                                    <span className="text-xs text-foreground-muted uppercase tracking-widest font-bold">{t.common.vibePulse}</span>
                                 </div>
                             </div>
                             <div className="flex items-center gap-2 overflow-x-auto pb-4 scrollbar-hide">
@@ -369,10 +379,10 @@ export default function DashboardPage() {
                                             >
                                                 <span className="text-4xl mb-2">{level.icon}</span>
                                                 <span className="text-sm font-bold" style={{ color: level.color }}>
-                                                    {level.name}
+                                                    {(t.levels as any)[Object.keys(t.levels)[index]] || level.name}
                                                 </span>
                                                 {isCurrent && (
-                                                    <span className="text-[10px] bg-primary text-background px-2 py-0.5 rounded-full font-bold mt-2 uppercase tracking-tight">ACTIVE</span>
+                                                    <span className="text-[10px] bg-primary text-background px-2 py-0.5 rounded-full font-bold mt-2 uppercase tracking-tight">{t.common.active}</span>
                                                 )}
                                             </motion.div>
                                             {index < LEVELS.length - 1 && (
@@ -403,10 +413,10 @@ export default function DashboardPage() {
                             <div className="flex items-center justify-between mb-4">
                                 <h2 className="text-lg font-bold flex items-center gap-2">
                                     <Trophy className="text-xp" size={20} />
-                                    Achievements
+                                    {t.profile.achievements}
                                 </h2>
                                 <Link href="/profile" className="text-primary text-sm hover:text-secondary">
-                                    View all →
+                                    {t.common.viewAll} →
                                 </Link>
                             </div>
                             <div className="flex flex-wrap gap-2">
@@ -422,7 +432,7 @@ export default function DashboardPage() {
                                 ))}
                                 {unlockedAchievements.length > 6 && (
                                     <div className="text-sm text-foreground-muted flex items-center px-2">
-                                        +{unlockedAchievements.length - 6} more
+                                        +{unlockedAchievements.length - 6} {t.common.more}
                                     </div>
                                 )}
                             </div>

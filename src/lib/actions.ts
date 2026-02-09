@@ -74,7 +74,7 @@ export async function registerUser(formData: FormData) {
         if (process.env.RESEND_API_KEY) {
             try {
                 await resend.emails.send({
-                    from: process.env.RESEND_FROM || 'Vibe Stranding <onboarding@resend.dev>',
+                    from: process.env.RESEND_FROM || 'Vibe Stranding <hello@send.notifications.zagula.dev>',
                     to: email,
                     subject: `Welcome to the Network, ${username}! 🦀`,
                     react: WelcomeEmail({ username }),
@@ -195,6 +195,42 @@ export async function getChallenge(challengeId: string) {
         return null;
     }
 }
+
+export async function getUserProfile(userId: string) {
+    try {
+        if (!prisma) return null;
+
+        const user = await (prisma as any).user.findUnique({
+            where: { id: userId },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                image: true,
+                xp: true,
+                level: true,
+                role: true,
+                currentStreak: true,
+                progress: { select: { challengeId: true } },
+                achievements: { select: { achievementId: true } }
+            }
+        });
+
+        if (!user) return null;
+
+        return {
+            ...user,
+            username: user.name || "Viber",
+            avatar: user.image || "🦊",
+            completedChallenges: user.progress?.map((p: any) => p.challengeId) || [],
+            achievements: user.achievements?.map((a: any) => a.achievementId) || [],
+        };
+    } catch (error) {
+        console.error('User profile fetch error:', error);
+        return null;
+    }
+}
+
 export async function getAllUsers() {
     try {
         if (!prisma) return [];

@@ -54,7 +54,7 @@ export default function LearnPage() {
                 <div className="space-y-10">
                     {LEVELS.map((level, levelIndex) => {
                         const isUnlocked = user.level >= level.id;
-                        const challenges = getChallengesByLevel(level.id);
+                        const challenges = getChallengesByLevel(level.id, user.id);
                         const completedCount = challenges.filter(c =>
                             user.completedChallenges.includes(c.id)
                         ).length;

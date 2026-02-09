@@ -62,17 +62,45 @@ export const getXPForNextLevel = (level: number): number => {
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const { data: session, status, update } = useSession();
-  const isLoading = status === "loading";
-  const [theme, setThemeState] = React.useState<'light' | 'dark' | 'stranding'>('stranding');
+  const isLoadingSession = status === "loading";
+  const [theme, setThemeState] = React.useState<'light' | 'dark' | 'stranding'>('dark');
   const [language, setLangState] = React.useState<Language>('en');
+  const [userProfile, setUserProfile] = React.useState<any>(null);
+  const [isProfileLoading, setIsProfileLoading] = React.useState(false);
+
+  // Load profile data when session changes
+  React.useEffect(() => {
+    const fetchProfile = async () => {
+      if (session?.user?.id) {
+        setIsProfileLoading(true);
+        try {
+          const { getUserProfile } = await import('./actions');
+          const profile = await getUserProfile(session.user.id);
+          if (profile) {
+            setUserProfile(profile);
+          }
+        } catch (error) {
+          console.error("Error fetching user profile:", error);
+        } finally {
+          setIsProfileLoading(false);
+        }
+      } else {
+        setUserProfile(null);
+      }
+    };
+
+    fetchProfile();
+  }, [session?.user?.id]);
 
   // Load settings
   React.useEffect(() => {
-    const savedTheme = localStorage.getItem('vibe-theme') as 'light' | 'dark';
+    const savedTheme = localStorage.getItem('vibe-theme') as 'light' | 'dark' | 'stranding';
     const savedLang = localStorage.getItem('vibe-lang') as Language;
     if (savedTheme) {
       setThemeState(savedTheme);
-      document.documentElement.setAttribute('data-theme', savedTheme);
+      if (typeof document !== 'undefined') {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      }
     }
     if (savedLang) setLangState(savedLang);
   }, []);
@@ -92,22 +120,46 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const user = useMemo(() => {
     if (!session?.user) return null;
-    return {
+
+    // Combine session data with separately fetched profile data
+    const basicUser = {
       id: session.user.id,
       username: session.user.name || "Viber",
       email: session.user.email,
-      avatar: session.user.avatar || session.user.image || "🦊",
-      xp: session.user.xp || 0,
-      level: session.user.level || 1,
       role: session.user.role || "USER",
-      achievements: session.user.achievements || [],
-      completedChallenges: session.user.completedChallenges || [],
-      currentStreak: session.user.currentStreak || 0,
+    };
+
+    if (!userProfile) {
+      return {
+        ...basicUser,
+        avatar: "🦊",
+        xp: 0,
+        level: 1,
+        achievements: [],
+        completedChallenges: [],
+        currentStreak: 0,
+        longestStreak: 0,
+        joinedAt: new Date().toISOString(),
+        lastActiveAt: new Date().toISOString(),
+      } as User;
+    }
+
+    return {
+      ...basicUser,
+      username: userProfile.username || basicUser.username,
+      avatar: userProfile.avatar || "🦊",
+      xp: userProfile.xp || 0,
+      level: userProfile.level || 1,
+      achievements: userProfile.achievements || [],
+      completedChallenges: userProfile.completedChallenges || [],
+      currentStreak: userProfile.currentStreak || 0,
       longestStreak: 0,
-      joinedAt: new Date().toISOString(),
-      lastActiveAt: new Date().toISOString(),
+      joinedAt: userProfile.joinedAt || new Date().toISOString(),
+      lastActiveAt: userProfile.lastActiveAt || new Date().toISOString(),
     } as User;
-  }, [session]);
+  }, [session, userProfile]);
+
+  const isLoading = isLoadingSession || (!!session?.user && !userProfile && isProfileLoading);
 
   const login = async (identifier: string, password: string) => {
     try {
@@ -168,14 +220,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await update(); // Trigger session refresh
   };
 
-  const updateAvatar = async (avatar: string) => {
-    if (!user) return { success: false, error: 'Not authenticated' };
+  const updateAvatar = async (newAvatar: string) => {
+    if (!session?.user?.id) return { success: false, error: 'Not authenticated' };
 
-    const { updateUserAvatar } = await import('./actions');
-    const result = await updateUserAvatar(user.id, avatar);
+    const { updateUserAvatar, getUserProfile } = await import('./actions');
+    const result = await updateUserAvatar(session.user.id, newAvatar);
 
     if (result.success) {
-      await update({ image: avatar });
+      // Refresh local profile state immediately
+      const updatedProfile = await getUserProfile(session.user.id);
+      if (updatedProfile) setUserProfile(updatedProfile);
       return { success: true };
     }
     return { success: false, error: result.error };
@@ -186,10 +240,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const completeChallenge = async (challengeId: string, xpEarned: number) => {
-    if (!user) return;
-    const result = await updateXpProgress(user.id, xpEarned, challengeId);
+    if (!session?.user?.id) return;
+    const { updateXpProgress, getUserProfile } = await import('./actions');
+    const result = await updateXpProgress(session.user.id, xpEarned, challengeId);
     if (result.success) {
-      await update(); // Refresh session data
+      // Refresh local profile state immediately
+      const updatedProfile = await getUserProfile(session.user.id);
+      if (updatedProfile) setUserProfile(updatedProfile);
     }
   };
 

@@ -70,7 +70,7 @@ export interface Challenge {
 }
 
 export const CHALLENGES: Challenge[] = [
-    // Level 1 - Sprout Challenges
+    // Level 1 - Sprout Challenges (6 total)
     {
         id: 'prompt-basics-1',
         title: 'Your First Prompt',
@@ -78,19 +78,8 @@ export const CHALLENGES: Challenge[] = [
         category: 'prompting',
         difficulty: 1,
         xpReward: 50,
-        instructions: `Write a prompt that asks an AI to create a simple "Hello World" function in JavaScript.
-
-Your prompt should:
-1. Be clear and specific
-2. Specify the programming language
-3. Ask for a complete, runnable function
-
-Type your prompt in the editor below.`,
-        hints: [
-            'Start by stating what you want clearly',
-            'Mention JavaScript specifically',
-            'Ask for a function, not just code',
-        ],
+        instructions: `Write a prompt that asks an AI to create a simple "Hello World" function in JavaScript.`,
+        hints: ['Start by stating what you want clearly', 'Mention JavaScript specifically'],
         tags: ['beginner', 'prompting', 'fundamentals'],
     },
     {
@@ -100,26 +89,9 @@ Type your prompt in the editor below.`,
         category: 'prompting',
         difficulty: 1,
         xpReward: 75,
-        instructions: `Write a prompt that asks an AI to help fix a bug in your code.
-
-The bug: A function that calculates the sum of an array is returning NaN.
-
-Your prompt should include:
-1. The problem description
-2. What you expected vs what happened
-3. Ask for an explanation, not just a fix`,
-        starterCode: `function sumArray(arr) {
-  let total;
-  for (let i = 0; i <= arr.length; i++) {
-    total += arr[i];
-  }
-  return total;
-}`,
-        hints: [
-            'Describe the expected behavior',
-            'Mention the actual behavior (NaN)',
-            'Ask "why" not just "how to fix"',
-        ],
+        instructions: `Write a prompt that asks an AI to help fix a bug in your code.`,
+        starterCode: `function sumArray(arr) { let total; for (let i = 0; i <= arr.length; i++) { total += arr[i]; } return total; }`,
+        hints: ['Describe the expected behavior', 'Mention the actual behavior (NaN)'],
         tags: ['beginner', 'prompting', 'debugging'],
     },
     {
@@ -129,20 +101,45 @@ Your prompt should include:
         category: 'prompting',
         difficulty: 1,
         xpReward: 100,
-        instructions: `You want to build a simple todo app. Instead of one massive prompt, 
-break it down into 3 smaller, focused prompts.
-
-Write your first prompt: Create the data structure for a todo item.
-Then think about what the next 2 prompts would be.`,
-        hints: [
-            'Think about the pieces: data, display, interactions',
-            'Each prompt should have ONE clear goal',
-            'Smaller prompts = better results',
-        ],
+        instructions: `Break down building a simple todo app into 3 smaller prompts.`,
+        hints: ['Think about the pieces: data, display, interactions'],
         tags: ['beginner', 'prompting', 'planning'],
     },
+    {
+        id: 'prompt-basics-4',
+        title: 'Persona Crafting',
+        description: 'Learn how to make the AI act as a specific professional',
+        category: 'prompting',
+        difficulty: 1,
+        xpReward: 60,
+        instructions: `Write a prompt asking the AI to act as a "Senior UI/UX Designer" and review a basic HTML button.`,
+        hints: ['Tell the AI exactly what its role is', 'Specify the tone (constructive, professional)'],
+        tags: ['beginner', 'persona', 'ux'],
+    },
+    {
+        id: 'prompt-basics-5',
+        title: 'Zero-Shot vs Few-Shot',
+        description: 'Understand the difference between asking and showing examples',
+        category: 'prompting',
+        difficulty: 1,
+        xpReward: 80,
+        instructions: `Write a "few-shot" prompt that gives the AI 2 examples of turning a plain sentence into a "vibe coding" style sentence.`,
+        hints: ['Provide pattern: Input -> Output', 'Follow with your actual request'],
+        tags: ['beginner', 'few-shot', 'patterns'],
+    },
+    {
+        id: 'prompt-basics-6',
+        title: 'The Art of Precision',
+        description: 'Learn to avoid ambiguity in your requests',
+        category: 'prompting',
+        difficulty: 1,
+        xpReward: 90,
+        instructions: `Write a prompt to generate a Python dictionary containing the top 3 cities in Poland and their population, formatted exactly as JSON.`,
+        hints: ['Specify the format clearly', 'Mention any constraints or data types'],
+        tags: ['beginner', 'precision', 'json'],
+    },
 
-    // Level 2 - Apprentice Challenges
+    // Level 2 - Apprentice Challenges (6 total)
     {
         id: 'chain-prompting-1',
         title: 'Prompt Chaining',
@@ -150,18 +147,8 @@ Then think about what the next 2 prompts would be.`,
         category: 'building',
         difficulty: 2,
         xpReward: 150,
-        instructions: `You're building a user authentication system. Create a chain of 3 prompts:
-
-1. First prompt: Create the User interface/type
-2. Second prompt: Create a signup function (references the User type)
-3. Third prompt: Create a login function (builds on previous code)
-
-Write all three prompts in sequence.`,
-        hints: [
-            'Reference previous outputs: "Using the User type from before..."',
-            'Build incrementally',
-            'Keep context between prompts',
-        ],
+        instructions: `Create a chain of 3 prompts to build a basic user authentication flow.`,
+        hints: ['Reference previous outputs', 'Build incrementally'],
         tags: ['intermediate', 'prompting', 'chaining'],
     },
     {
@@ -171,22 +158,9 @@ Write all three prompts in sequence.`,
         category: 'debugging',
         difficulty: 2,
         xpReward: 175,
-        instructions: `The AI generated this code for fetching user data, but it has issues.
-Identify the problems and write a prompt to fix them.`,
-        starterCode: `async function fetchUser(id) {
-  const response = fetch('/api/users/' + id);
-  const data = response.json();
-  return data;
-}
-
-// Usage
-const user = fetchUser(123);
-console.log(user.name);`,
-        hints: [
-            'Look for async/await issues',
-            'Check error handling',
-            'Consider edge cases',
-        ],
+        instructions: `Identify issues in the AI code for fetching user data and write a prompt to fix them.`,
+        starterCode: `async function fetchUser(id) { const response = fetch('/api/users/' + id); const data = response.json(); return data; }`,
+        hints: ['Look for async/await issues', 'Check error handling'],
         tags: ['intermediate', 'debugging', 'async'],
     },
     {
@@ -196,26 +170,47 @@ console.log(user.name);`,
         category: 'refactoring',
         difficulty: 2,
         xpReward: 150,
-        instructions: `Write a prompt that asks AI to refactor this code to be:
-- More readable
-- Following best practices
-- Have proper error handling`,
-        starterCode: `function p(d) {
-  if(d.n && d.e && d.a >= 18) {
-    return {s: true, m: 'ok'}
-  } else {
-    return {s: false, m: 'bad'}
-  }
-}`,
-        hints: [
-            'Ask for meaningful variable names',
-            'Request TypeScript types',
-            'Ask for explanation of changes',
-        ],
-        tags: ['intermediate', 'refactoring', 'best-practices'],
+        instructions: `Write a prompt to refactor a complex if-else chain into a switch statement or object literal mapping.`,
+        starterCode: `function getStatus(code) { if(code === 'a') return 'Active'; else if(code === 'p') return 'Pending'; else return 'None'; }`,
+        hints: ['Ask for readability improvements', 'Suggest specific patterns'],
+        tags: ['intermediate', 'refactoring', 'clean-code'],
+    },
+    {
+        id: 'conditional-prompts-1',
+        title: 'Logic Branching',
+        description: 'Prompts that change behavior based on system input',
+        category: 'prompting',
+        difficulty: 2,
+        xpReward: 160,
+        instructions: `Write a system prompt that handles two types of users: "Admin" and "Guest", giving different access instructions to each.`,
+        hints: ['Use If/Then logic in the prompt', 'Be explicit about the boundaries'],
+        tags: ['intermediate', 'logic', 'system-prompts'],
+    },
+    {
+        id: 'style-refactor-1',
+        title: 'Clean Architecture Basics',
+        description: 'Refactor small functions for better testability',
+        category: 'refactoring',
+        difficulty: 2,
+        xpReward: 180,
+        instructions: `Refactor a function that does both data calculation and UI logging into two separate functions.`,
+        starterCode: `function saveAndLog(val) { const newXp = val * 10; console.log('Saving XP:', newXp); return newXp; }`,
+        hints: ['Ask the AI to follow the Single Responsibility Principle'],
+        tags: ['intermediate', 'refactoring', 'patterns'],
+    },
+    {
+        id: 'interactive-debug-1',
+        title: 'Interactive Debugging',
+        description: 'Using AI as a pair programmer to hunt logic errors',
+        category: 'debugging',
+        difficulty: 2,
+        xpReward: 200,
+        instructions: `Write a prompt that asks the AI to play "The Rubber Duck" and help you find why a loop is running infinitely.`,
+        hints: ['Explain what you think is happening', 'Ask the AI to ask YOU questions'],
+        tags: ['intermediate', 'debugging', 'logic'],
     },
 
-    // Level 3 - Developer Challenges
+    // Level 3 - Developer Challenges (4 total)
     {
         id: 'feature-complete-1',
         title: 'Full Feature Build',
@@ -223,20 +218,8 @@ console.log(user.name);`,
         category: 'building',
         difficulty: 3,
         xpReward: 300,
-        instructions: `Build a complete "Dark Mode Toggle" feature using AI prompts.
-
-Your solution should include:
-1. React component with toggle button
-2. CSS for both light and dark themes
-3. Persistence using localStorage
-4. Smooth transition animations
-
-Write the prompts you would use to build this.`,
-        hints: [
-            'Start with the core toggle logic',
-            'Add styling in a separate prompt',
-            'Handle persistence after core works',
-        ],
+        instructions: `Build a complete "Dark Mode Toggle" feature using AI prompts.`,
+        hints: ['Start with the core toggle logic', 'Add styling in a separate prompt'],
         tags: ['advanced', 'building', 'react', 'css'],
     },
     {
@@ -246,25 +229,36 @@ Write the prompts you would use to build this.`,
         category: 'speed',
         difficulty: 3,
         xpReward: 250,
-        timeLimit: 300, // 5 minutes
-        instructions: `SPEED CHALLENGE! 
-
-Create prompts to build a form validation system that:
-- Validates email format
-- Checks password strength
-- Confirms password match
-- Shows error messages
-
-Timer starts now! Write efficient prompts.`,
-        hints: [
-            'Be concise but specific',
-            'One prompt for all validations',
-            'Ask for the error messages too',
-        ],
+        timeLimit: 300,
+        instructions: `Create prompts for a form validation system (Email, Password, Match).`,
+        hints: ['Be concise but specific', 'One prompt for all validations'],
         tags: ['advanced', 'speed', 'forms', 'validation'],
     },
+    {
+        id: 'api-integration-1',
+        title: 'API Bridge',
+        description: 'Connect AI logic to real-world data sources',
+        category: 'building',
+        difficulty: 3,
+        xpReward: 320,
+        instructions: `Write prompts to create a service that fetches data from a weather API and transforms it into a custom dashboard format.`,
+        hints: ['Specify the API endpoint and expected fields', 'Explain the final structure needed'],
+        tags: ['advanced', 'api', 'transformation'],
+    },
+    {
+        id: 'speed-state-1',
+        title: 'State Management Race',
+        description: 'Implement a complex cart state machine under pressure',
+        category: 'speed',
+        difficulty: 3,
+        xpReward: 280,
+        timeLimit: 240,
+        instructions: `Prompt the AI to build a shopping cart state handler (add, remove, clear, total) in under 4 minutes.`,
+        hints: ['List all actions in the first prompt', 'Ask for a Reducer or Hook pattern'],
+        tags: ['advanced', 'speed', 'react', 'state'],
+    },
 
-    // Level 4 - Expert Challenges
+    // Level 4 - Expert Challenges (4 total)
     {
         id: 'architecture-1',
         title: 'System Architecture',
@@ -272,21 +266,8 @@ Timer starts now! Write efficient prompts.`,
         category: 'building',
         difficulty: 4,
         xpReward: 500,
-        instructions: `Design a real-time chat application architecture using AI.
-
-Create prompts to design:
-1. Database schema
-2. API endpoints
-3. WebSocket events
-4. Frontend state management
-5. Message encryption approach
-
-Focus on the architecture, not implementation.`,
-        hints: [
-            'Ask AI to explain trade-offs',
-            'Request diagrams in text format',
-            'Consider scalability',
-        ],
+        instructions: `Design a real-time chat application architecture using AI.`,
+        hints: ['Ask AI to explain trade-offs', 'Consider scalability'],
         tags: ['expert', 'architecture', 'system-design'],
     },
     {
@@ -296,29 +277,34 @@ Focus on the architecture, not implementation.`,
         category: 'debugging',
         difficulty: 4,
         xpReward: 450,
-        instructions: `A production app has a memory leak. Users report the app slowing down after extended use.
-
-Write prompts to:
-1. Identify potential causes
-2. Create debugging strategies
-3. Implement fixes
-4. Add monitoring
-
-You have partial stack traces and user reports to work with.`,
-        starterCode: `// Error from production logs:
-// Warning: Maximum update depth exceeded
-// Warning: Can't perform a React state update on an unmounted component
-
-// User report: "App becomes unresponsive after ~30 minutes of use"`,
-        hints: [
-            'Ask about common memory leak patterns',
-            'Request cleanup code patterns',
-            'Ask for monitoring solutions',
-        ],
+        instructions: `Debug a memory leak in a production React application.`,
+        hints: ['Ask about common memory leak patterns', 'Request monitoring solutions'],
         tags: ['expert', 'debugging', 'production', 'performance'],
     },
+    {
+        id: 'security-expert-1',
+        title: 'Security First',
+        description: 'Fortifying applications against vulnerabilities',
+        category: 'debugging',
+        difficulty: 4,
+        xpReward: 550,
+        instructions: `Show the AI a code snippet with an XSS vulnerability and write a prompt to secure it while explaining the attack vector.`,
+        hints: ['Focus on input sanitization', 'Ask for prevention strategies'],
+        tags: ['expert', 'security', 'xss'],
+    },
+    {
+        id: 'perf-refactor-1',
+        title: 'Performance Tuning',
+        description: 'Using AI to identify bottlenecks in large datasets',
+        category: 'refactoring',
+        difficulty: 4,
+        xpReward: 480,
+        instructions: `Provide a slow data manipulation script and ask the AI to refactor it using specialized data structures (Sets, Maps, or TypedArrays).`,
+        hints: ['Mention the time/space complexity', 'Ask for before/after benchmarks'],
+        tags: ['expert', 'performance', 'refactoring'],
+    },
 
-    // Level 5 - Master Challenges
+    // Level 5 - Master Challenges (2 total)
     {
         id: 'full-app-1',
         title: 'Full Application Build',
@@ -326,26 +312,20 @@ You have partial stack traces and user reports to work with.`,
         category: 'building',
         difficulty: 5,
         xpReward: 1000,
-        instructions: `THE ULTIMATE CHALLENGE
-
-Build a complete "Link Shortener" application using only AI assistance.
-
-Requirements:
-- User authentication
-- URL shortening with custom aliases
-- Click tracking and analytics
-- Dashboard with charts
-- API rate limiting
-- Deployment configuration
-
-Document your entire prompt journey from start to finish.`,
-        hints: [
-            'Plan before prompting',
-            'Build incrementally',
-            'Test each piece',
-            'This is meant to take time',
-        ],
+        instructions: `Build a complete "Link Shortener" application using only AI assistance.`,
+        hints: ['Plan before prompting', 'Test each piece'],
         tags: ['master', 'full-stack', 'complete-app'],
+    },
+    {
+        id: 'saas-architecture-1',
+        title: 'AI SaaS Blueprint',
+        description: 'Architecting the future of subscription services',
+        category: 'building',
+        difficulty: 5,
+        xpReward: 1200,
+        instructions: `Architect a full-stack AI-as-a-Service platform (Billing, Auth, AI Queue, Webhooks). Document the entire prompt journey.`,
+        hints: ['Decompose the system into microservices', 'Ask for infrastructure as code patterns'],
+        tags: ['master', 'saas', 'architecture'],
     },
 ];
 
@@ -360,120 +340,22 @@ export interface Achievement {
 }
 
 export const ACHIEVEMENTS: Achievement[] = [
-    {
-        id: 'first_steps',
-        name: 'First Steps',
-        description: 'Created your VibeCoding account',
-        icon: '👋',
-        xpBonus: 0,
-    },
-    {
-        id: 'first_challenge',
-        name: 'First Blood',
-        description: 'Completed your first challenge',
-        icon: '🎯',
-        xpBonus: 25,
-    },
-    {
-        id: 'prompt_apprentice',
-        name: 'Prompt Apprentice',
-        description: 'Complete 5 prompting challenges',
-        icon: '📝',
-        xpBonus: 50,
-    },
-    {
-        id: 'speed_demon',
-        name: 'Speed Demon',
-        description: 'Complete a speed challenge under time limit',
-        icon: '⚡',
-        xpBonus: 75,
-    },
-    {
-        id: 'perfectionist',
-        name: 'Perfectionist',
-        description: 'Get perfect score on 5 challenges',
-        icon: '💎',
-        xpBonus: 100,
-    },
-    {
-        id: 'bug_hunter',
-        name: 'Bug Hunter',
-        description: 'Complete all debugging challenges',
-        icon: '🐛',
-        xpBonus: 150,
-    },
-    {
-        id: 'streak_3',
-        name: 'On a Roll',
-        description: 'Maintain a 3-day streak',
-        icon: '🔥',
-        xpBonus: 50,
-    },
-    {
-        id: 'streak_7',
-        name: 'Week Warrior',
-        description: 'Maintain a 7-day streak',
-        icon: '🔥',
-        xpBonus: 100,
-    },
-    {
-        id: 'streak_30',
-        name: 'Monthly Master',
-        description: 'Maintain a 30-day streak',
-        icon: '👑',
-        xpBonus: 500,
-    },
-    {
-        id: 'level_up_2',
-        name: 'Growing Strong',
-        description: 'Reach Level 2 - Apprentice',
-        icon: '🌿',
-        xpBonus: 25,
-    },
-    {
-        id: 'level_up_3',
-        name: 'Developer Status',
-        description: 'Reach Level 3 - Developer',
-        icon: '🌳',
-        xpBonus: 50,
-    },
-    {
-        id: 'level_up_4',
-        name: 'Expert Mode',
-        description: 'Reach Level 4 - Expert',
-        icon: '⚡',
-        xpBonus: 100,
-    },
-    {
-        id: 'level_up_5',
-        name: 'Vibe Master',
-        description: 'Reach Level 5 - Master',
-        icon: '🔮',
-        xpBonus: 250,
-    },
-    {
-        id: 'all_categories',
-        name: 'Well Rounded',
-        description: 'Complete at least one challenge in each category',
-        icon: '🌈',
-        xpBonus: 100,
-    },
-    {
-        id: 'night_owl',
-        name: 'Night Owl',
-        description: 'Complete a challenge between midnight and 4 AM',
-        icon: '🦉',
-        xpBonus: 25,
-        secret: true,
-    },
-    {
-        id: 'early_bird',
-        name: 'Early Bird',
-        description: 'Complete a challenge between 5 AM and 7 AM',
-        icon: '🐦',
-        xpBonus: 25,
-        secret: true,
-    },
+    { id: 'first_steps', name: 'First Steps', description: 'Created your VibeCoding account', icon: '👋', xpBonus: 0 },
+    { id: 'first_challenge', name: 'First Blood', description: 'Completed your first challenge', icon: '🎯', xpBonus: 25 },
+    { id: 'prompt_apprentice', name: 'Prompt Apprentice', description: 'Complete 5 prompting challenges', icon: '📝', xpBonus: 50 },
+    { id: 'speed_demon', name: 'Speed Demon', description: 'Complete a speed challenge under time limit', icon: '⚡', xpBonus: 75 },
+    { id: 'perfectionist', name: 'Perfectionist', description: 'Get perfect score on 5 challenges', icon: '💎', xpBonus: 100 },
+    { id: 'bug_hunter', name: 'Bug Hunter', description: 'Complete all debugging challenges', icon: '🐛', xpBonus: 150 },
+    { id: 'streak_3', name: 'On a Roll', description: 'Maintain a 3-day streak', icon: '🔥', xpBonus: 50 },
+    { id: 'streak_7', name: 'Week Warrior', description: 'Maintain a 7-day streak', icon: '🔥', xpBonus: 100 },
+    { id: 'streak_30', name: 'Monthly Master', description: 'Maintain a 30-day streak', icon: '👑', xpBonus: 500 },
+    { id: 'level_up_2', name: 'Growing Strong', description: 'Reach Level 2 - Apprentice', icon: '🌿', xpBonus: 25 },
+    { id: 'level_up_3', name: 'Developer Status', description: 'Reach Level 3 - Developer', icon: '🌳', xpBonus: 50 },
+    { id: 'level_up_4', name: 'Expert Mode', description: 'Reach Level 4 - Expert', icon: '⚡', xpBonus: 100 },
+    { id: 'level_up_5', name: 'Vibe Master', description: 'Reach Level 5 - Master', icon: '🔮', xpBonus: 250 },
+    { id: 'all_categories', name: 'Well Rounded', description: 'Complete at least one challenge in each category', icon: '🌈', xpBonus: 100 },
+    { id: 'night_owl', name: 'Night Owl', description: 'Complete a challenge between midnight and 4 AM', icon: '🦉', xpBonus: 25, secret: true },
+    { id: 'early_bird', name: 'Early Bird', description: 'Complete a challenge between 5 AM and 7 AM', icon: '🐦', xpBonus: 25, secret: true },
 ];
 
 // Category info for display
@@ -485,9 +367,26 @@ export const CATEGORY_INFO: Record<ChallengeCategory, { name: string; icon: stri
     speed: { name: 'Speed Coding', icon: '⚡', color: '#f59e0b' },
 };
 
-// Helper function to get challenges by difficulty
-export const getChallengesByLevel = (level: number): Challenge[] => {
-    return CHALLENGES.filter((c) => c.difficulty === level);
+// Seeded shuffle utility
+export function seededShuffle<T>(array: T[], seed: string): T[] {
+    const shuffled = [...array];
+    // Simple numeric hash of the seed string
+    let numericSeed = seed.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = (numericSeed + i) % (i + 1);
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        // Mutate numericSeed slightly for the next iteration
+        numericSeed = (numericSeed * 9301 + 49297) % 233280;
+    }
+    return shuffled;
+}
+
+// Helper function to get challenges by difficulty with deterministic shuffle per user
+export const getChallengesByLevel = (level: number, userId?: string): Challenge[] => {
+    const filtered = CHALLENGES.filter((c) => c.difficulty === level);
+    if (!userId) return filtered;
+    return seededShuffle(filtered, userId);
 };
 
 // Helper function to get level info
